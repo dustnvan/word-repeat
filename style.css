@@ -34,13 +34,17 @@
   background-color: rgb(100, 100, 100);
   z-index: -1;
 }
-.input-text .duplicated-word {
+.input-text:empty:before {
+  content: attr(data-placeholder);
+}
+
+.check .duplicated-word {
   text-align: center;
   position: relative;
   display: inline-block;
   z-index: 1;
 }
-.input-text .duplicated-word .highlight {
+.check .duplicated-word .highlight {
   position: absolute;
   top: 0;
   left: 0;
@@ -51,7 +55,7 @@
   z-index: -1;
   transform: translateY(50%);
 }
-.input-text .duplicated-word:hover {
+.check .duplicated-word:hover {
   cursor: pointer;
   opacity: 0.8;
 }
