@@ -1,0 +1,29 @@
+.tooltip {
+  position: absolute;
+  display: none;
+  background-color: white;
+  padding: 10px;
+  z-index: 2;
+  padding-left: 50px;
+  padding-right: 20px;
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+  transform: translate(-50%, -120%);
+
+  // display: none;
+  top: 30px;
+  left: 30px;
+}
+
+.syn-wrapper {
+  grid-template-columns: 1fr 1fr 1fr;
+  text-align: center;
+  display: grid;
+  gap: 20px;
+}
+
+.syns {
+  &:hover {
+    cursor: pointer;
+  }
+}

@@ -1,0 +1,87 @@
+$form-color: rgb(100, 100, 100);
+
+.input-text {
+  border-top-left-radius: 20px;
+  color: #fff;
+  line-height: 2;
+  height: 30rem;
+  width: 500px;
+  resize: none;
+  display: block;
+  padding: 20px;
+  font-size: 1.4rem;
+  overflow: auto;
+  background-color: $form-color;
+  z-index: -1;
+
+
+  .duplicated-word {
+    text-align: center;
+    position: relative;
+    display: inline-block;
+    z-index: 1;
+
+
+
+    .highlight {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 50%;
+      border-radius: 10px;
+      box-shadow: -10px 10px 10px rgba(0, 0, 0, 0.5);
+      animation: colorIn .5s linear forwards;
+      z-index: -1;
+      transform: translateY(50%);
+    }
+  }
+
+  .duplicated-word:hover {
+    cursor: pointer;
+    opacity: .8;
+  }
+}
+
+.input-text:focus {
+  outline: none;
+}
+
+// Animations
+@keyframes colorIn {
+  from {
+    width: 0;
+  }
+
+  to {
+    width: 100%;
+  }
+}
+
+
+
+// Bottom form
+.bottom-form {
+  background-color: $form-color;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  border-bottom-left-radius: 20px;
+
+  .submit-btn {
+    width: 400px;
+    height: 50px;
+    border-radius: 20px;
+    color: black;
+    text-transform: uppercase;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: 700;
+    font-size: 1.5rem;
+    text-align: center;
+  }
+
+  .submit-btn:hover {
+    cursor: pointer;
+    transform: scale(.98);
+  }
+}

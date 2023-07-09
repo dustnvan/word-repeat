@@ -1,0 +1,25 @@
+@use 'scrollbar';
+@use 'form.scss';
+@use 'tooltip';
+
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+main {
+  background: url(imgs/landscape-vector.jpg);
+  height: 100vh;
+  position: relative;
+}
+
+.container {
+  position: absolute;
+  top: 50%;
+  right: 10%;
+  transform: translateY(-50%);
+}
