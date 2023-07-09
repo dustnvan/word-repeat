@@ -17,12 +17,12 @@ if (textBox.innerText == '') textBox.innerText = placeholder;
 
 textBox.addEventListener('focus', function (e) {
   const value = e.target.innerHTML;
-  value === placeholder && (e.target.innerHTML = '');
+  if (value == placeholder) e.target.innerHTML = '';
 });
 
 textBox.addEventListener('blur', function (e) {
   const value = e.target.innerHTML;
-  value === '' && (e.target.innerHTML = placeholder);
+  if (value == '') e.target.innerHTML = placeholder;
 });
 
 
