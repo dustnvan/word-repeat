@@ -1,11 +1,29 @@
 const form = document.getElementById('form');
+const btn = document.getElementById('submit-btn');
 const toolTip = document.getElementById('tooltip');
 const synsWrapper = document.getElementById('syn-wrapper');
 const filterMatches = 2;
+const textBox = document.getElementById('input-text');
+
 
 // Flags
 let editing = false;
 let isSubmitting = false;
+
+// Homemade placeholder 
+const placeholder = textBox.getAttribute('data-placeholder');
+// Set the placeholder as initial content if it's empty
+if (textBox.innerText == '') textBox.innerText = placeholder;
+
+textBox.addEventListener('focus', function (e) {
+  const value = e.target.innerHTML;
+  value === placeholder && (e.target.innerHTML = '');
+});
+
+textBox.addEventListener('blur', function (e) {
+  const value = e.target.innerHTML;
+  value === '' && (e.target.innerHTML = placeholder);
+});
 
 
 // submit handling
@@ -20,7 +38,8 @@ function submitHandler(e) {
   }
   isSubmitting = true;
 
-  updateInput();
+  if (!editing) updateInput();
+  else editingMode();
 
   // prevent spam submits
   setTimeout(() => {
@@ -30,9 +49,13 @@ function submitHandler(e) {
 
 // Handles submit & input changes
 function updateInput() {
-  const textBox = document.getElementById('input-text');
+  editing = true;
+
   // Turns off editing
   textBox.setAttribute("contenteditable", false);
+  textBox.classList.add('check');
+  btn.value = 'Edit';
+
   // Clear
   textBox.innerHTML = textBox.innerText;
 
@@ -43,6 +66,7 @@ function updateInput() {
 
   // Making word: repeatNum map
   words.forEach(word => {
+    word = word.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
     if (!wordMap.has(word)) {
       wordMap.set(word, 1);
     }
@@ -69,7 +93,15 @@ function updateInput() {
       textHtml = textBox.innerHTML;
     }
   });
+}
 
+
+// For edit mode
+function editingMode() {
+  editing = false;
+  textBox.classList.remove('check');
+  textBox.setAttribute("contenteditable", true);
+  btn.value = 'Check for duplicates';
 }
 
 // Tooltip
@@ -99,6 +131,7 @@ document.addEventListener('click', e => {
 
     }).catch(() => {
       console.log('no synonyms found');
+      toolTip.style.display = 'none';
     });
 
     // Positioning

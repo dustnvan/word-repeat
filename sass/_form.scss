@@ -14,7 +14,12 @@ $form-color: rgb(100, 100, 100);
   background-color: $form-color;
   z-index: -1;
 
+  &:empty:before {
+    content: attr(data-placeholder);
+  }
+}
 
+.check {
   .duplicated-word {
     text-align: center;
     position: relative;
