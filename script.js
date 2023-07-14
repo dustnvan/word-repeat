@@ -4,7 +4,7 @@ const toolTip = document.getElementById('tooltip');
 const synsWrapper = document.getElementById('syn-wrapper');
 const filterMatches = 2;
 const textBox = document.getElementById('input-text');
-
+const dupWordBox = document.getElementById('duplicated-words-box');
 
 // Flags
 let editing = false;
@@ -81,7 +81,6 @@ function updateInput() {
     wordSpan.appendChild(wordNode);
     textBox.appendChild(wordSpan);
 
-
     // Wordmap for repeat check
     if (!wordMap.has(lowerCaseWord)) {
       wordMap.set(lowerCaseWord, 1);
@@ -91,35 +90,28 @@ function updateInput() {
     }
   });
 
+  // Clearing non duplicates
+  wordMap.forEach((repeats, word) => {
+    if (repeats == 1) wordMap.delete(word);
+  });
+
   // Finding and styling repeated words
   let num = 1;
-  wordMap.forEach((repeats, word) => {
-    if (repeats > 1) {
-      duplicatedWords = document.querySelectorAll(`#${word.toLowerCase()}`);
+  wordMap.forEach((_, word) => {
+    duplicatedWords = document.querySelectorAll(`#${word.toLowerCase()}`);
 
-      // Styling and handling duplicated words
-      duplicatedWords.forEach(duplicatedWord => {
-        const highlightSpan = document.createElement('span');
-        highlightSpan.classList.add('highlight');
-        highlightSpan.style.backgroundColor = selectColor(num);
+    // Styling and handling duplicated words
+    duplicatedWords.forEach(duplicatedWord => {
+      const highlightSpan = document.createElement('span');
+      highlightSpan.classList.add('highlight');
+      highlightSpan.style.backgroundColor = selectColor(num);
 
-        duplicatedWord.classList.add('duplicated-word');
-        duplicatedWord.appendChild(highlightSpan);
-      });
+      duplicatedWord.classList.add('duplicated-word');
+      duplicatedWord.appendChild(highlightSpan);
+    });
 
-      num += 10;
-    }
+    num += 10;
   });
-}
-
-
-// For edit mode
-function editingMode() {
-  editing = false;
-  textBox.classList.remove('check');
-  textBox.setAttribute("contenteditable", true);
-  btn.value = 'Check for duplicates';
-  textBox.innerHTML = textBox.innerText;
 }
 
 // Tooltip
@@ -129,7 +121,7 @@ document.addEventListener('click', e => {
   // If clicked on duplicated word
   if (e.target.className == 'duplicated-word') {
 
-    const promise = fetchThesaurus(e.target.innerText, 6);
+    const promise = fetchThesaurus(e.target.id, 6);
     promise.then((syns) => {
       // Visibility
       toolTip.style.display = 'block';
@@ -164,10 +156,23 @@ document.addEventListener('click', e => {
 });
 
 function synsHandler(syn, oldWord) {
-  oldWord.childNodes[1].nodeValue = syn.innerText;
+  // Changing text node
+  oldWord.childNodes[0].nodeValue = syn.innerText;
   updateInput();
 }
 
+
+// For edit mode
+function editingMode() {
+  editing = false;
+
+  textBox.classList.remove('check');
+  textBox.setAttribute("contenteditable", true);
+
+  btn.value = 'Check for duplicates';
+
+  textBox.innerHTML = textBox.innerText;
+}
 
 
 // Random pastel color gen
