@@ -15,11 +15,7 @@ main {
   background: url(imgs/landscape-vector.jpg);
   height: 100vh;
   position: relative;
-}
-
-.container {
-  position: absolute;
-  top: 50%;
-  right: 10%;
-  transform: translateY(-50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
