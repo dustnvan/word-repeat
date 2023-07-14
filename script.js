@@ -56,41 +56,58 @@ function updateInput() {
   textBox.classList.add('check');
   btn.value = 'Edit';
 
-  // Clear
-  textBox.innerHTML = textBox.innerText;
-
   const text = textBox.innerText;
-  const words = text.split(' ');
+  const words = text.split(/\b/);
 
+  // Clear html
+  textBox.innerHTML = '';
+
+  punctRegEx = new RegExp('\\W+', 'g');
   const wordMap = new Map();
 
-  // Making word: repeatNum map
   words.forEach(word => {
-    word = word.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
-    if (!wordMap.has(word)) {
-      wordMap.set(word, 1);
+    // Adding punctuation & spaces 
+    if (punctRegEx.test(word)) {
+      textBox.innerHTML += word;
+      return;
+    }
+
+    // Reconstructing html with span around words
+    const lowerCaseWord = word.toLowerCase();
+
+    const wordSpan = document.createElement('span');
+    wordSpan.setAttribute('id', lowerCaseWord);
+    const wordNode = document.createTextNode(word);
+    wordSpan.appendChild(wordNode);
+    textBox.appendChild(wordSpan);
+
+
+    // Wordmap for repeat check
+    if (!wordMap.has(lowerCaseWord)) {
+      wordMap.set(lowerCaseWord, 1);
     }
     else {
-      wordMap.set(word, wordMap.get(word) + 1);
+      wordMap.set(lowerCaseWord, wordMap.get(lowerCaseWord) + 1);
     }
   });
 
   // Finding and styling repeated words
   let num = 1;
-  let textHtml = textBox.innerHTML;
   wordMap.forEach((repeats, word) => {
-    let wordTag = `<span class='duplicated-word' id='${word}'><span class='highlight' style="background-color:${selectColor(num)};"></span>${word}</span>`;
-
     if (repeats > 1) {
-      let regExp = new RegExp('\\b' + word + '\\b', 'gi');
+      duplicatedWords = document.querySelectorAll(`#${word.toLowerCase()}`);
 
-      textBox.innerHTML = textHtml.replaceAll(regExp, wordTag);
-      textHtml = textBox.innerHTML;
+      // Styling and handling duplicated words
+      duplicatedWords.forEach(duplicatedWord => {
+        const highlightSpan = document.createElement('span');
+        highlightSpan.classList.add('highlight');
+        highlightSpan.style.backgroundColor = selectColor(num);
+
+        duplicatedWord.classList.add('duplicated-word');
+        duplicatedWord.appendChild(highlightSpan);
+      });
+
       num += 10;
-    }
-    else {
-      textBox.innerHTML = textHtml.replaceAll(wordTag, word);
-      textHtml = textBox.innerHTML;
     }
   });
 }
@@ -102,6 +119,7 @@ function editingMode() {
   textBox.classList.remove('check');
   textBox.setAttribute("contenteditable", true);
   btn.value = 'Check for duplicates';
+  textBox.innerHTML = textBox.innerText;
 }
 
 // Tooltip
