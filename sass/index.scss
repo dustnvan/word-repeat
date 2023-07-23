@@ -12,7 +12,7 @@
 }
 
 main {
-  background: url(imgs/landscape-vector.jpg);
+  background: url(imgs/landscape-vector.jpg) center cover no-repeat;
   height: 100vh;
   position: relative;
   display: flex;
